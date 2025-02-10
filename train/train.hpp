@@ -125,6 +125,51 @@ public:
         train.Read(is);
         return is;
     }
+
+private:
+struct Assignment {
+    size_t index;
+    size_t baseOccupancy;
+    double fraction;
+    size_t capacity;
+};
+
+void swapAssignment(Assignment &a, Assignment &b) {
+    Assignment tmp = a;
+    a = b;
+    b = tmp;
+}
+
+int partitionAssignments(Assignment* arr, int low, int high) {
+    double pivot = arr[high].fraction;
+    int i = low - 1;
+    for (int j = low; j < high; ++j) {
+        if (arr[j].fraction > pivot) {
+            ++i;
+            swapAssignment(arr[i], arr[j]);
+        }
+    }
+    swapAssignment(arr[i + 1], arr[high]);
+    return i + 1;
+}
+
+void quickSortAssignments(Assignment* arr, int low, int high) {
+    if (low < high) {
+        int pi = partitionAssignments(arr, low, high);
+        quickSortAssignments(arr, low, pi - 1);
+        quickSortAssignments(arr, pi + 1, high);
+    }
+}
+
+
+public:
+
+void BalanceOccupancy();
+
+void MinimizeVans();
+
+void PlaceRestaurantVanOptimally();
+
 };
 
 } // namespace mgt
